@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_24_155334) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_24_220326) do
   create_table "bookings", force: :cascade do |t|
     t.integer "satisfaction_score"
     t.text "notes"
@@ -28,6 +28,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_24_155334) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id"
+    t.datetime "end_time", null: false
     t.index ["start_time", "user_id"], name: "index_time_slots_on_start_time_and_user_id", unique: true
     t.index ["user_id"], name: "index_time_slots_on_user_id"
   end
