@@ -4,7 +4,7 @@ class CreateUsers < ActiveRecord::Migration[7.2]
       t.string :first_name
       t.string :last_name
       t.string :timezone
-      t.integer :type
+      t.integer :type, not_null: true
 
       t.timestamps
     end
