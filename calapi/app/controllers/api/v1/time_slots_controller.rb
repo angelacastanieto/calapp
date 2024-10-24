@@ -4,8 +4,16 @@ class Api::V1::TimeSlotsController < ApplicationController
   # GET /time_slots
   def index
     user_id = time_slot_params[:user_id]
+    from_time = time_slot_params[:from_time]
+    to_time = time_slot_params[:to_time]
 
+    # this could be changed to optionally include from_time and to_time in the time_slot query
+    # if a user case is found
     @time_slots = TimeSlot.where(user_id: user_id)
+                          .where('? <= start_time', from_time)
+                          .where('? >= end_time', to_time)
+    pp "acac time slots"
+    pp @time_slots
 
     render json: @time_slots
   end
@@ -60,6 +68,6 @@ class Api::V1::TimeSlotsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def time_slot_params
-      params.permit(:user_id, :start_time)
+      params.permit(:user_id, :start_time, :from_time, :to_time)
     end
 end

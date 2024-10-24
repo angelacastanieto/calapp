@@ -11,21 +11,33 @@ export const Coach = ({ user }) => {
   const [startTime, setStartTime] = useState()
   const [createTimeSlotErrors, setCreateTimeSlotErrors] = useState()
 
+  console.log('acac selectedDate', selectedDate)
   const getTimeSlots = async () => {
-    return fetch(`http://localhost:3001/api/v1/time_slots/?user_id=${userId}`, {
+      // this should already be at beginning of day, but still setting as 0 to be safe
+    if (!selectedDate) {
+      return null
+    }
+    const fromTime = new Date(selectedDate.getTime())
+    fromTime.setHours(0, 0, 0, 0)
+    // set to end of day
+    const toTime = new Date(selectedDate.getTime())
+    toTime.setHours(59, 59, 59, 59)
+
+    
+    return fetch(`http://localhost:3001/api/v1/time_slots/?user_id=${userId}&from_time=${fromTime.toISOString()}&to_time=${toTime.toISOString()}`, {
       method: 'GET',
     }).then(res => res.json())
   }
-  
-const createTimeSlot = async(url, { arg }) => {
-  console.log(JSON.stringify(arg))
-  return fetch(url, {
+
+  const createTimeSlot = async (url, { arg }) => {
+    console.log(JSON.stringify(arg))
+    return fetch(url, {
       method: 'POST',
-      headers: {'Content-Type':'application/json'},
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(arg)
     }).then(res => res.json()).then(mutate)
   }
-  
+
   const { data: timeSlots, loading, error, mutate } = useSWR(`http://localhost:3001/api/v1/time_slots?user_id=${userId}`, getTimeSlots)
 
 
@@ -39,7 +51,7 @@ const createTimeSlot = async(url, { arg }) => {
     e.preventDefault();
     // validation for timeslot overlap can be on backend
     setStartTime(null)
- 
+
 
     const [hours, minutes] = startTime.split(':')
     // copy selected date so do not update selectedDate before submit
@@ -47,13 +59,13 @@ const createTimeSlot = async(url, { arg }) => {
     dateToSubmit.setHours(hours)
     dateToSubmit.setMinutes(minutes)
 
-    const newTimeSlot = { 
+    const newTimeSlot = {
       start_time: dateToSubmit.toISOString(),
       user_id: user.id
     }
 
     const result = await triggerCreateTimeSlot(newTimeSlot)
-    
+
     if (result.errors) {
       setCreateTimeSlotErrors(result.errors)
     }
