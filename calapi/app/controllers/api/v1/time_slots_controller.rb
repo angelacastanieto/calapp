@@ -48,6 +48,6 @@ class Api::V1::TimeSlotsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def time_slot_params
-      params.permit(:user_id)
+      params.permit(:user_id, :start_time)
     end
 end
