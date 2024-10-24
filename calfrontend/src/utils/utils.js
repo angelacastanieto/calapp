@@ -1,0 +1,1 @@
+export const userIsCoach = (userType) => userType=== 0 
