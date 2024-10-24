@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import useSWR from 'swr'
 import { userIsCoach } from '../utils/utils'
-import Coach from '../components/Coach'
-import Student from '../components/Student'
+import Coach from './Coach'
+import Student from './Student'
 import { fetcher } from '../fetchers/fetchers'
 
 const User = () => {
@@ -17,7 +17,7 @@ const User = () => {
   if (!user) {
     return null
   }
-  
+
   if (userIsCoach(user.user_type)) {
     return <Coach user={user} />
   }

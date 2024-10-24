@@ -8,8 +8,8 @@ const Layout = () => (
       <nav>
         <ul>
           <li><a href="/">Home</a></li>
-          <li><a href="/user/1">Example Coach</a></li>
-          <li><a href="/user/2">Example Student</a></li>
+          <li><a href="/users/1">Example Coach</a></li>
+          <li><a href="/users/2">Example Student</a></li>
         </ul>
       </nav>
     </header>
