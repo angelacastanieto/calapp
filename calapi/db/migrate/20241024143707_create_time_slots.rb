@@ -5,5 +5,8 @@ class CreateTimeSlots < ActiveRecord::Migration[7.2]
 
       t.timestamps
     end
+
+    add_reference :time_slots, :user, index: true, foreign_key: true
+    add_index :time_slots, [ :start_time, :user_id ], unique: true
   end
 end

@@ -43,3 +43,141 @@ Migrating to CreateTimeSlots (20241024143707)
   [1m[36mActiveRecord::SchemaMigration Create (0.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20241024143707') RETURNING "version"[0m
   [1m[36mTRANSACTION (0.3ms)[0m  [1m[36mcommit transaction[0m
   [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateTimeSlots (20241024143707)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.7ms)[0m  [1m[35mDROP TABLE "time_slots"[0m
+  [1m[36mActiveRecord::SchemaMigration Destroy (0.0ms)[0m  [1m[31mDELETE FROM "schema_migrations" WHERE "schema_migrations"."version" = '20241024143707'[0m
+  [1m[36mTRANSACTION (1.3ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.4ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateTimeSlots (20241024143707)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.8ms)[0m  [1m[35mCREATE TABLE "time_slots" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "start_time" datetime(6), "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mALTER TABLE "time_slots" ADD "user_id" integer[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_time_slots_on_user_id" ON "time_slots" ("user_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (1.3ms)[0m  [1m[35mCREATE TEMPORARY TABLE "atime_slots" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "start_time" datetime(6), "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "user_id" integer)[0m
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE INDEX "tindex_atime_slots_on_user_id" ON "atime_slots" ("user_id")[0m
+  [1m[35m (0.4ms)[0m  [1m[32mINSERT INTO "atime_slots" ("id","start_time","created_at","updated_at","user_id")
+                     SELECT "id","start_time","created_at","updated_at","user_id" FROM "time_slots"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE "time_slots"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "time_slots" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "start_time" datetime(6), "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "user_id" integer, CONSTRAINT "fk_rails_93805f48ad"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_time_slots_on_user_id" ON "time_slots" ("user_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "time_slots" ("id","start_time","created_at","updated_at","user_id")
+                     SELECT "id","start_time","created_at","updated_at","user_id" FROM "atime_slots"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE "atime_slots"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20241024143707') RETURNING "version"[0m
+  [1m[36mTRANSACTION (0.7ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateTimeSlots (20241024143707)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.2ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.6ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TEMPORARY TABLE "atime_slots" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "start_time" datetime(6), "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "user_id" integer)[0m
+  [1m[35m (0.6ms)[0m  [1m[35mCREATE INDEX "tindex_atime_slots_on_user_id" ON "atime_slots" ("user_id")[0m
+  [1m[35m (0.2ms)[0m  [1m[32mINSERT INTO "atime_slots" ("id","start_time","created_at","updated_at","user_id")
+                     SELECT "id","start_time","created_at","updated_at","user_id" FROM "time_slots"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE "time_slots"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "time_slots" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "start_time" datetime(6), "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "user_id" integer)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_time_slots_on_user_id" ON "time_slots" ("user_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "time_slots" ("id","start_time","created_at","updated_at","user_id")
+                     SELECT "id","start_time","created_at","updated_at","user_id" FROM "atime_slots"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE "atime_slots"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TEMPORARY TABLE "atime_slots" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "start_time" datetime(6), "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "user_id" integer)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "tindex_atime_slots_on_user_id" ON "atime_slots" ("user_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "atime_slots" ("id","start_time","created_at","updated_at","user_id")
+                     SELECT "id","start_time","created_at","updated_at","user_id" FROM "time_slots"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE "time_slots"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "time_slots" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "start_time" datetime(6), "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "time_slots" ("id","start_time","created_at","updated_at")
+                     SELECT "id","start_time","created_at","updated_at" FROM "atime_slots"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE "atime_slots"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE "time_slots"[0m
+  [1m[36mActiveRecord::SchemaMigration Destroy (0.0ms)[0m  [1m[31mDELETE FROM "schema_migrations" WHERE "schema_migrations"."version" = '20241024143707'[0m
+  [1m[36mTRANSACTION (1.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.4ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateTimeSlots (20241024143707)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.7ms)[0m  [1m[35mCREATE TABLE "time_slots" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "start_time" datetime(6), "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mALTER TABLE "time_slots" ADD "user_id" integer[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_time_slots_on_user_id" ON "time_slots" ("user_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (1.4ms)[0m  [1m[35mCREATE TEMPORARY TABLE "atime_slots" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "start_time" datetime(6), "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "user_id" integer)[0m
+  [1m[35m (0.5ms)[0m  [1m[35mCREATE INDEX "tindex_atime_slots_on_user_id" ON "atime_slots" ("user_id")[0m
+  [1m[35m (0.4ms)[0m  [1m[32mINSERT INTO "atime_slots" ("id","start_time","created_at","updated_at","user_id")
+                     SELECT "id","start_time","created_at","updated_at","user_id" FROM "time_slots"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE "time_slots"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "time_slots" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "start_time" datetime(6), "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "user_id" integer, CONSTRAINT "fk_rails_93805f48ad"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_time_slots_on_user_id" ON "time_slots" ("user_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "time_slots" ("id","start_time","created_at","updated_at","user_id")
+                     SELECT "id","start_time","created_at","updated_at","user_id" FROM "atime_slots"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE "atime_slots"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_time_slots_on_start_time_and_user" ON "time_slots" ("start_time", "user")[0m
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.4ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateTimeSlots (20241024143707)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.7ms)[0m  [1m[35mCREATE TABLE "time_slots" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "start_time" datetime(6), "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mALTER TABLE "time_slots" ADD "user_id" integer[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_time_slots_on_user_id" ON "time_slots" ("user_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (1.3ms)[0m  [1m[35mCREATE TEMPORARY TABLE "atime_slots" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "start_time" datetime(6), "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "user_id" integer)[0m
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE INDEX "tindex_atime_slots_on_user_id" ON "atime_slots" ("user_id")[0m
+  [1m[35m (0.4ms)[0m  [1m[32mINSERT INTO "atime_slots" ("id","start_time","created_at","updated_at","user_id")
+                     SELECT "id","start_time","created_at","updated_at","user_id" FROM "time_slots"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE "time_slots"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "time_slots" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "start_time" datetime(6), "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "user_id" integer, CONSTRAINT "fk_rails_93805f48ad"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_time_slots_on_user_id" ON "time_slots" ("user_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "time_slots" ("id","start_time","created_at","updated_at","user_id")
+                     SELECT "id","start_time","created_at","updated_at","user_id" FROM "atime_slots"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE "atime_slots"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_time_slots_on_start_time_and_user_id" ON "time_slots" ("start_time", "user_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20241024143707') RETURNING "version"[0m
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m

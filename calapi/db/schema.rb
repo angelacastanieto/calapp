@@ -15,6 +15,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_24_143707) do
     t.datetime "start_time"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "user_id"
+    t.index ["start_time", "user_id"], name: "index_time_slots_on_start_time_and_user_id", unique: true
+    t.index ["user_id"], name: "index_time_slots_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -25,4 +28,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_24_143707) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  add_foreign_key "time_slots", "users"
 end
