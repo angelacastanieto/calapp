@@ -538,3 +538,91 @@ FOREIGN KEY ("user_id")
   [1m[36mBooking Create (0.6ms)[0m  [1m[32mINSERT INTO "bookings" ("satisfaction_score", "notes", "created_at", "updated_at", "user_id", "time_slot_id") VALUES (?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["satisfaction_score", nil], ["notes", nil], ["created_at", "2024-10-24 16:00:13.601237"], ["updated_at", "2024-10-24 16:00:13.601237"], ["user_id", 1], ["time_slot_id", 1]]
   [1m[36mTRANSACTION (0.4ms)[0m  [1m[36mcommit transaction[0m
   [1m[36mBooking Load (0.5ms)[0m  [1m[34mSELECT "bookings".* FROM "bookings" ORDER BY "bookings"."id" DESC LIMIT ?[0m  [["LIMIT", 1]]
+Started GET "/users" for ::1 at 2024-10-24 12:10:35 -0400
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  
+ActionController::RoutingError (No route matches [GET] "/users"):
+  
+Started GET "/favicon.ico" for ::1 at 2024-10-24 12:10:35 -0400
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+Started GET "/api/v1/users" for ::1 at 2024-10-24 12:10:42 -0400
+  
+ActionController::RoutingError (uninitialized constant Api::V1):
+
+Causes:
+ActionDispatch::MissingController (uninitialized constant Api::V1)
+NameError (uninitialized constant Api::V1)
+  
+Started GET "/api/v1/users" for ::1 at 2024-10-24 12:11:46 -0400
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  
+ActionController::RoutingError (uninitialized constant Api::V1):
+
+Causes:
+ActionDispatch::MissingController (uninitialized constant Api::V1)
+NameError (uninitialized constant Api::V1)
+  
+Started GET "/" for ::1 at 2024-10-24 12:11:49 -0400
+Processing by Rails::WelcomeController#index as HTML
+  Rendering /opt/homebrew/lib/ruby/gems/3.3.0/gems/railties-7.2.1.2/lib/rails/templates/rails/welcome/index.html.erb
+  Rendered /opt/homebrew/lib/ruby/gems/3.3.0/gems/railties-7.2.1.2/lib/rails/templates/rails/welcome/index.html.erb (Duration: 1.4ms | GC: 0.0ms)
+Completed 200 OK in 9ms (Views: 3.7ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api" for ::1 at 2024-10-24 12:11:51 -0400
+  
+ActionController::RoutingError (No route matches [GET] "/api"):
+  
+Started GET "/" for ::1 at 2024-10-24 12:11:58 -0400
+Processing by Rails::WelcomeController#index as HTML
+  Rendering /opt/homebrew/lib/ruby/gems/3.3.0/gems/railties-7.2.1.2/lib/rails/templates/rails/welcome/index.html.erb
+  Rendered /opt/homebrew/lib/ruby/gems/3.3.0/gems/railties-7.2.1.2/lib/rails/templates/rails/welcome/index.html.erb (Duration: 0.7ms | GC: 0.0ms)
+Completed 200 OK in 3ms (Views: 3.0ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/" for ::1 at 2024-10-24 12:12:23 -0400
+Processing by Rails::WelcomeController#index as */*
+  Rendering /opt/homebrew/lib/ruby/gems/3.3.0/gems/railties-7.2.1.2/lib/rails/templates/rails/welcome/index.html.erb
+  Rendered /opt/homebrew/lib/ruby/gems/3.3.0/gems/railties-7.2.1.2/lib/rails/templates/rails/welcome/index.html.erb (Duration: 0.1ms | GC: 0.0ms)
+Completed 200 OK in 1ms (Views: 0.9ms | ActiveRecord: 0.0ms (0 queries, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/v1/users" for ::1 at 2024-10-24 12:12:27 -0400
+  
+ActionController::RoutingError (uninitialized constant Api::V1):
+
+Causes:
+ActionDispatch::MissingController (uninitialized constant Api::V1)
+NameError (uninitialized constant Api::V1)
+  
+Started GET "/api/v1/users" for ::1 at 2024-10-24 12:13:21 -0400
+  
+ActionController::RoutingError (uninitialized constant Api::V1):
+
+Causes:
+ActionDispatch::MissingController (uninitialized constant Api::V1)
+NameError (uninitialized constant Api::V1)
+  
+Started GET "/api/v1/users" for ::1 at 2024-10-24 12:13:35 -0400
+Processing by Api::V1::UsersController#index as HTML
+  [1m[36mUser Load (0.7ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  ↳ app/controllers/api/v1/users_controller.rb:8:in `index'
+Completed 200 OK in 19ms (Views: 9.3ms | ActiveRecord: 1.2ms (1 query, 0 cached) | GC: 0.1ms)
+
+
+Started GET "/api/v1/bookings" for ::1 at 2024-10-24 12:14:07 -0400
+Processing by Api::V1::BookingsController#index as HTML
+  [1m[36mBooking Load (4.7ms)[0m  [1m[34mSELECT "bookings".* FROM "bookings"[0m
+  ↳ app/controllers/api/v1/bookings_controller.rb:8:in `index'
+Completed 200 OK in 34ms (Views: 18.7ms | ActiveRecord: 6.1ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/api/v1/time_slots" for ::1 at 2024-10-24 12:14:11 -0400
+Processing by Api::V1::TimeSlotsController#index as HTML
+  [1m[36mTimeSlot Load (0.2ms)[0m  [1m[34mSELECT "time_slots".* FROM "time_slots"[0m
+  ↳ app/controllers/api/v1/time_slots_controller.rb:8:in `index'
+Completed 200 OK in 22ms (Views: 13.6ms | ActiveRecord: 1.2ms (1 query, 0 cached) | GC: 0.0ms)
+
+
