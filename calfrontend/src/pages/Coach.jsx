@@ -9,6 +9,7 @@ export const Coach = ({ user }) => {
   const { userId } = useParams()
   const [selectedDate, setSelectedDate] = useState()
   const [startTime, setStartTime] = useState()
+  const [createTimeSlotErrors, setCreateTimeSlotErrors] = useState()
 
   const getTimeSlots = async () => {
     return fetch(`http://localhost:3001/api/v1/time_slots/?user_id=${userId}`, {
@@ -30,9 +31,9 @@ const createTimeSlot = async(url, { arg }) => {
 
   const { data, trigger: triggerCreateTimeSlot, isMutating } = useSWRMutation('http://localhost:3001/api/v1/time_slots/', createTimeSlot)
 
-// TODO; handle errors
-  // if (error || timeSlots?.error) return <div>Error loading coach time slots: {error?.message || timeSlots?.error}</div>
-  // if (loading) return <div>loading...</div>
+  // TODO: move this loading and error handling closer to the Time slot.  Should move to own components
+  if (error || timeSlots?.error) return <div>Error loading coach time slots: {error?.message || timeSlots?.error}</div>
+  if (loading) return <div>loading...</div>
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -52,7 +53,10 @@ const createTimeSlot = async(url, { arg }) => {
     }
 
     const result = await triggerCreateTimeSlot(newTimeSlot)
-    console.log('acac result', result)
+    
+    if (result.errors) {
+      setCreateTimeSlotErrors(result.errors)
+    }
     setStartTime(null)
   }
 
@@ -81,8 +85,9 @@ const createTimeSlot = async(url, { arg }) => {
 
       Existing Time slots
       {timeSlots?.length > 0 && <ul>
-        {timeSlots.map(timeSlot => <li key={`timeslot-${timeSlot.id}`}>{timeSlot.start_time}</li>)}
+        {timeSlots.map(timeSlot => <li key={`timeslot-${timeSlot.id}`}>{timeSlot.start_time} to {timeSlot.end_time}</li>)}
       </ul>}
+      <div>{createTimeSlotErrors}</div>
     </div>
   )
 }

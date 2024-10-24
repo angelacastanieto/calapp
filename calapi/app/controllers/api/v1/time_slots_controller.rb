@@ -17,7 +17,19 @@ class Api::V1::TimeSlotsController < ApplicationController
 
   # POST /time_slots
   def create
-    @time_slot = TimeSlot.new(start_time: time_slot_params[:start_time], user_id: time_slot_params[:user_id])
+    start_time_string = time_slot_params[:start_time]
+    user_id = time_slot_params[:user_id]
+    start_time = Time.parse(start_time_string)
+    end_time = start_time + 2.hours
+
+    overlapping_time_slots = TimeSlot.where(user_id: user_id)
+                                     .where('? >= start_time AND ? <= end_time', start_time, start_time)
+                                     .or(TimeSlot.where('? >= start_time AND ? <= end_time', end_time, end_time))                               
+                            
+    return render json: {errors: ['Another time slot exists during these start and end times']}, 
+           status: :unprocessable_entity if overlapping_time_slots.length > 0
+
+    @time_slot = TimeSlot.new(start_time: start_time_string, end_time: end_time.iso8601, user_id: user_id)
 
     if @time_slot.save
       render json: @time_slot, status: :created
