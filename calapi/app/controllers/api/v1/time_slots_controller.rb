@@ -17,10 +17,10 @@ class Api::V1::TimeSlotsController < ApplicationController
 
   # POST /time_slots
   def create
-    @time_slot = TimeSlot.new(time_slot_params)
+    @time_slot = TimeSlot.new(start_time: time_slot_params[:start_time], user_id: time_slot_params[:user_id])
 
     if @time_slot.save
-      render json: @time_slot, status: :created, location: @time_slot
+      render json: @time_slot, status: :created
     else
       render json: @time_slot.errors, status: :unprocessable_entity
     end
