@@ -46,6 +46,6 @@ class Api::V1::TimeSlotsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def time_slot_params
-      params.require(:time_slot).permit(:start_time)
+      params.require(:time_slot).permit(:start_time, :user_id)
     end
 end
