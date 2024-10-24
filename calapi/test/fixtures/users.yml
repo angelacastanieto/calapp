@@ -4,10 +4,10 @@ one:
   first_name: MyString
   last_name: MyString
   timezone: MyString
-  type: 1
+  user_type: 1
 
 two:
   first_name: MyString
   last_name: MyString
   timezone: MyString
-  type: 1
+  user_type: 1

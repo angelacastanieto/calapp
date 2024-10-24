@@ -36,7 +36,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_24_150945) do
     t.string "first_name"
     t.string "last_name"
     t.string "timezone"
-    t.integer "type", null: false
+    t.integer "user_type", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
