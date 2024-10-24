@@ -3,7 +3,9 @@ class Api::V1::TimeSlotsController < ApplicationController
 
   # GET /time_slots
   def index
-    @time_slots = TimeSlot.all
+    user_id = time_slot_params[:user_id]
+
+    @time_slots = TimeSlot.where(user_id: user_id)
 
     render json: @time_slots
   end
@@ -46,6 +48,6 @@ class Api::V1::TimeSlotsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def time_slot_params
-      params.require(:time_slot).permit(:start_time, :user_id)
+      params.permit(:user_id)
     end
 end
