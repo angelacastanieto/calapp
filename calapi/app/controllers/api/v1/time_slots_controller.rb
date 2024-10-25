@@ -15,6 +15,7 @@ class Api::V1::TimeSlotsController < ApplicationController
     @time_slots = TimeSlot.where(user_id: user_id)
                           .where('? <= start_time', Time.parse(from_time))
                           .where('? >= end_time', Time.parse(to_time))
+                          .order(start_time: :asc)
 
     render json: @time_slots
   end
@@ -32,8 +33,8 @@ class Api::V1::TimeSlotsController < ApplicationController
     end_time = start_time + 2.hours
 
     overlapping_time_slots = TimeSlot.where(user_id: user_id)
-                                     .where('? >= start_time AND ? <= end_time', start_time, start_time)
-                                     .or(TimeSlot.where('? >= start_time AND ? <= end_time', end_time, end_time))                               
+                                     .where('? >= start_time AND ? < end_time', start_time, start_time)
+                                     .or(TimeSlot.where('? > start_time AND ? <= end_time', end_time, end_time))                               
                             
     return render json: {errors: ['Another time slot exists during these start and end times']}, 
            status: :unprocessable_entity if overlapping_time_slots.length > 0

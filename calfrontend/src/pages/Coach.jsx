@@ -103,17 +103,15 @@ const TimeSlotPicker = ({ user }) => {
 
   return (
     <div>
-      Create a time slot
       <Calendar onClickDay={handleClickDay} />
-      {selectedDate ? `Selected date: ${selectedDate.toDateString()}` : null}
       <form onSubmit={handleSubmit}>
         <label>Pick a start time for a 2-hour appointment
-          <input required={true} value={startTime || ''} aria-label="start time" type="time" onChange={handleStartTimeChange} />
+          <input required={true} value={startTime || ''} min="08:00" max="18:00" aria-label="start time" type="time" onChange={handleStartTimeChange} />
         </label>
         <button disabled={!(selectedDate) || isMutating} type="submit">Submit</button>
       </form>
 
-      Existing Time slots
+      {selectedDate ? `Your time slots for: ${selectedDate.toDateString()}` : null}
       {timeSlots?.length > 0 && <ul>
         {timeSlots.map(timeSlot => {
           const startTime = new Date(timeSlot.start_time).toLocaleTimeString()
