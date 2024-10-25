@@ -7,13 +7,14 @@ class Api::V1::TimeSlotsController < ApplicationController
     from_time = time_slot_params[:from_time]
     to_time = time_slot_params[:to_time]
 
+    return render json: {errors: ['user_id, from_time and to_time required']}, 
+      status: :unprocessable_entity unless (user_id && from_time && to_time)
+
     # this could be changed to optionally include from_time and to_time in the time_slot query
     # if a user case is found
     @time_slots = TimeSlot.where(user_id: user_id)
-                          .where('? <= start_time', from_time)
-                          .where('? >= end_time', to_time)
-    pp "acac time slots"
-    pp @time_slots
+                          .where('? <= start_time', Time.parse(from_time))
+                          .where('? >= end_time', Time.parse(to_time))
 
     render json: @time_slots
   end
