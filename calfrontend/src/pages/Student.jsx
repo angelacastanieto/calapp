@@ -3,13 +3,14 @@ import Calendar from 'react-calendar';
 import useSWR from 'swr'
 import useSWRMutation from 'swr/mutation'
 
-import { getTimeSlots } from '../fetchers/fetchers';
+import { getTimeSlots, getBookings } from '../fetchers/fetchers';
 
 export const Student = ({ user }) => {
   const [selectedDate, setSelectedDate] = useState()
   const [createBookingErrors, setCreateBookingErrors] = useState()
 
-  const { data: timeSlots, loading, error, mutate: refetchTimeSlots } = useSWR(selectedDate, () => getTimeSlots(1, selectedDate, true))
+  const { data: timeSlots, loading, error, mutate: refetchTimeSlots } = useSWR(`timeSlots-${selectedDate}`, () => getTimeSlots(1, selectedDate, true))
+  const { data: bookings, loading: bookingLoading, error: bookingError, mutate: refetchBookings } = useSWR(`bookings-${selectedDate}`, () => getBookings(user.id, 1, selectedDate))
 
   const createBooking = async (url, { arg }) => {
     return fetch(url, {
@@ -19,6 +20,7 @@ export const Student = ({ user }) => {
     }).then(res => {
       if (!res.error) {
         refetchTimeSlots()
+        refetchBookings()
       }
       return res.json()
     })
@@ -69,6 +71,24 @@ export const Student = ({ user }) => {
         })}
       </ul>}
       <div>{createBookingErrors}</div>
+      Booked Timeslots for this day
+      {bookings?.length > 0 && <ul>
+        {bookings.map(bookingData => {
+          const booking = bookingData.booking
+          const timeSlot = bookingData.time_slot
+
+          if (!timeSlot || !booking) {
+            return null
+          }
+
+          const startTime = new Date(timeSlot.start_time).toLocaleTimeString()
+          const endTime = new Date(timeSlot.end_time).toLocaleTimeString()
+
+          return (
+            <li key={`booking-${booking.id}`}>
+              {startTime} to {endTime}</li>)
+        })}
+      </ul>}
     </div>
   )
 }

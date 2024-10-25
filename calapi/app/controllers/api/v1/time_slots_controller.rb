@@ -9,7 +9,7 @@ class Api::V1::TimeSlotsController < ApplicationController
     exclude_booked = time_slot_params[:exclude_booked] == 'true'
 
     return render json: {errors: ['user_id, from_time and to_time required']}, 
-      status: :unprocessable_entity unless (user_id && from_time && to_time)
+      status: :bad_request unless (user_id && from_time && to_time)
 
     # this could be changed to optionally include from_time and to_time in the time_slot query
     # if a user case is found
