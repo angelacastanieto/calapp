@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import useSWRMutation from 'swr/mutation'
 import useSWR from 'swr'
+import { getTimeSlots } from '../fetchers/fetchers';
 
 import Calendar from 'react-calendar';
 import { useParams } from 'react-router-dom';
@@ -21,23 +22,6 @@ const TimeSlotPicker = ({ user }) => {
   const [startTime, setStartTime] = useState()
   const [createTimeSlotErrors, setCreateTimeSlotErrors] = useState()
 
-  const getTimeSlots = async () => {
-    // this should already be at beginning of day, but still setting as 0 to be safe
-    if (!selectedDate) {
-      return null
-    }
-
-    const fromTime = new Date(selectedDate.getTime())
-    fromTime.setHours(0, 0, 0, 0)
-    // set to end of day
-    const toTime = new Date(selectedDate.getTime())
-    toTime.setHours(23, 59, 59, 59)
-
-    return fetch(`http://localhost:3001/api/v1/time_slots/?user_id=${userId}&from_time=${fromTime.toISOString()}&to_time=${toTime.toISOString()}`, {
-      method: 'GET',
-    }).then(res => res.json())
-  }
-
   const createTimeSlot = async (url, { arg }) => {
     return fetch(url, {
       method: 'POST',
@@ -51,7 +35,7 @@ const TimeSlotPicker = ({ user }) => {
     })
   }
 
-  const { data: timeSlots, loading, error, mutate: refetchTimeSlots } = useSWR(selectedDate, getTimeSlots)
+  const { data: timeSlots, loading, error, mutate: refetchTimeSlots } = useSWR(selectedDate, () => getTimeSlots(userId, selectedDate))
 
   const { data, trigger: triggerCreateTimeSlot, isMutating } = useSWRMutation('http://localhost:3001/api/v1/time_slots/', createTimeSlot)
 

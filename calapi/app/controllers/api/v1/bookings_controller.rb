@@ -15,10 +15,14 @@ class Api::V1::BookingsController < ApplicationController
 
   # POST /bookings
   def create
-    @booking = Booking.new(booking_params)
+    # TODO: move logic to model
+    user_id = booking_params[:user_id]
+    time_slot_id = booking_params[:time_slot_id]
+
+    @booking = Booking.new(user_id: user_id, time_slot_id: time_slot_id)
 
     if @booking.save
-      render json: @booking, status: :created, location: @booking
+      render json: @booking, status: :created
     else
       render json: @booking.errors, status: :unprocessable_entity
     end
@@ -46,6 +50,6 @@ class Api::V1::BookingsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def booking_params
-      params.permit(:user_id)
+      params.permit(:user_id, :time_slot_id)
     end
 end

@@ -6,16 +6,18 @@ class Api::V1::TimeSlotsController < ApplicationController
     user_id = time_slot_params[:user_id]
     from_time = time_slot_params[:from_time]
     to_time = time_slot_params[:to_time]
+    exclude_booked = time_slot_params[:exclude_booked] == 'true'
 
     return render json: {errors: ['user_id, from_time and to_time required']}, 
       status: :unprocessable_entity unless (user_id && from_time && to_time)
 
     # this could be changed to optionally include from_time and to_time in the time_slot query
     # if a user case is found
-    @time_slots = TimeSlot.where(user_id: user_id)
-                          .where('? <= start_time', Time.parse(from_time))
-                          .where('? >= end_time', Time.parse(to_time))
-                          .order(start_time: :asc)
+    time_slots = TimeSlot.where(user_id: user_id)
+    time_slots = time_slots.left_outer_joins(:booking).where(booking: {time_slot: nil}) if exclude_booked
+    @time_slots = time_slots.where('? <= start_time', Time.parse(from_time))
+                            .where('? >= end_time', Time.parse(to_time))
+                            .order(start_time: :asc)
 
     render json: @time_slots
   end
@@ -70,6 +72,6 @@ class Api::V1::TimeSlotsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def time_slot_params
-      params.permit(:user_id, :start_time, :from_time, :to_time)
+      params.permit(:user_id, :start_time, :from_time, :to_time, :exclude_booked)
     end
 end
