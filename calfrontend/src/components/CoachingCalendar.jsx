@@ -65,7 +65,7 @@ const TimeSlotCreatorForm = ({
     </div>
   )
 }
-const CoachingCalendar = ({ user, isCreator, isBooker }) => {
+const CoachingCalendar = ({ user, coachUserId, isCreator, isBooker }) => {
   const [selectedDate, setSelectedDate] = useState()
   const [errors, setErrors] = useState()
 
@@ -75,8 +75,6 @@ const CoachingCalendar = ({ user, isCreator, isBooker }) => {
   if (timeSlotsData?.error) return <div>Error loading time slots: {timeSlotsData?.error}</div> //  todo: move down
   if (timeSlotsDataError) return <div>Error loading time slots: {timeSlotsDataError}</div> // todo: move down
   if (timeSlotsDataLoading) return <div>Looading...</div> // todo: move down
-
-  const coachUserId = 1 // TODO: make this selectable dropdown? 
 
   const handleClickDay = (value) => {
     if (errors) {
@@ -111,6 +109,8 @@ const CoachingCalendar = ({ user, isCreator, isBooker }) => {
     return null;    
   }
 
+  const noTimeSlots = timeSlotsData?.length === 0
+
   return (
     <div>
       <Calendar onClickDay={handleClickDay} />
@@ -120,9 +120,9 @@ const CoachingCalendar = ({ user, isCreator, isBooker }) => {
         onCreateSuccess={refetchTimeSlots}
       />}
 
-      {selectedDate ? `Your time slots for: ${selectedDate.toDateString()}` : null}
       {timeSlotsData && ( 
           <div>
+            {selectedDate ? `${noTimeSlots ? 'No' : ''} Time slots for: ${selectedDate.toDateString()}` : null}
             {timeSlotsData.map(timeSlotData => renderCalendar(timeSlotData))}
           </div>
         )

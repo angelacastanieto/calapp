@@ -7,7 +7,8 @@ export const Student = ({ user }) => {
     <div>
       <h2>Coach example</h2>
       <h3>Hi {user.first_name}</h3>
-      <CoachingCalendar user={user} isCreator />
+      Here is your calendar
+      <CoachingCalendar user={user} coachUserId={user.id} isCreator />
      </div>
   )
 }

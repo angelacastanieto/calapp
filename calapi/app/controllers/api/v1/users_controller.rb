@@ -3,7 +3,12 @@ class Api::V1::UsersController < ApplicationController
 
   # GET /users
   def index
-    @users = User.all
+    user_type = user_params[:user_type]
+
+    return render json: { errors: [ "user_type required" ] },
+      status: :bad_request unless user_type
+
+    @users = User.where(user_type: user_type)
 
     render json: @users
   end
@@ -46,6 +51,6 @@ class Api::V1::UsersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def user_params
-      params.require(:user).permit(:first_name, :last_name, :timezone, :type)
+      params.permit(:first_name, :last_name, :timezone, :user_type)
     end
 end
