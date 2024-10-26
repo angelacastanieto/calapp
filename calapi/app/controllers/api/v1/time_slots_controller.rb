@@ -6,20 +6,27 @@ class Api::V1::TimeSlotsController < ApplicationController
     user_id = time_slot_params[:user_id]
     from_time = time_slot_params[:from_time]
     to_time = time_slot_params[:to_time]
-    exclude_booked = time_slot_params[:exclude_booked] == 'true'
+    include_creator = time_slot_params[:include_creator] || true # TODO
+    include_bookings = time_slot_params[:include_bookings] || true # TODO
 
-    return render json: {errors: ['user_id, from_time and to_time required']}, 
-      status: :bad_request unless (user_id && from_time && to_time)
+    return render json: { errors: [ "user_id, from_time and to_time required" ] },
+      status: :bad_request unless user_id && from_time && to_time
 
     # this could be changed to optionally include from_time and to_time in the time_slot query
     # if a user case is found
     time_slots = TimeSlot.where(user_id: user_id)
-    time_slots = time_slots.left_outer_joins(:booking).where(booking: {time_slot: nil}) if exclude_booked
-    @time_slots = time_slots.where('? <= start_time', Time.parse(from_time))
-                            .where('? >= end_time', Time.parse(to_time))
+    time_slots.includes(:booking) if include_bookings
+    time_slots.includes(:user) if include_creator
+    @time_slots = time_slots.where("? <= start_time", Time.parse(from_time))
+                            .where("? >= end_time", Time.parse(to_time))
                             .order(start_time: :asc)
 
-    render json: @time_slots
+    render json: @time_slots.map { |time_slot| {
+      time_slot: time_slot,
+      creator: time_slot.user,
+      booking: time_slot.booking,
+      booker: time_slot.booking&.user
+    } }
   end
 
   # GET /time_slots/1
@@ -35,10 +42,10 @@ class Api::V1::TimeSlotsController < ApplicationController
     end_time = start_time + 2.hours
 
     overlapping_time_slots = TimeSlot.where(user_id: user_id)
-                                     .where('? >= start_time AND ? < end_time', start_time, start_time)
-                                     .or(TimeSlot.where('? > start_time AND ? <= end_time', end_time, end_time))                               
-                            
-    return render json: {errors: ['Another time slot exists during these start and end times']}, 
+                                     .where("? >= start_time AND ? < end_time", start_time, start_time)
+                                     .or(TimeSlot.where("? > start_time AND ? <= end_time", end_time, end_time))
+
+    return render json: { errors: [ "Another time slot exists during these start and end times" ] },
            status: :unprocessable_entity if overlapping_time_slots.length > 0
 
     @time_slot = TimeSlot.new(start_time: start_time_string, end_time: end_time.iso8601, user_id: user_id)

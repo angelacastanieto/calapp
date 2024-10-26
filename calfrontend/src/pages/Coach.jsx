@@ -97,13 +97,17 @@ const TimeSlotPicker = ({ user }) => {
 
       {selectedDate ? `Your time slots for: ${selectedDate.toDateString()}` : null}
       {timeSlots?.length > 0 && <ul>
-        {timeSlots.map(timeSlot => {
+        {timeSlots.map(timeSlotData => {
+          const timeSlot = timeSlotData.time_slot
           const startTime = new Date(timeSlot.start_time).toLocaleTimeString()
           const endTime = new Date(timeSlot.end_time).toLocaleTimeString()
-
+          const booking = timeSlotData.booking
+          const bookingUser = timeSlotData.booker
           return (
             <li key={`timeslot-${timeSlot.id}`}>
-              {startTime} to {endTime}</li>)
+              {startTime} to {endTime}{bookingUser && ` (Booked by ${bookingUser.first_name} ${bookingUser.last_name}) - ${bookingUser.phone_number}`}
+            </li>
+          )
         })}
       </ul>}
       <div>{createTimeSlotErrors}</div>

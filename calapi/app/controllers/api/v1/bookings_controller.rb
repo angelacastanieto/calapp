@@ -8,19 +8,19 @@ class Api::V1::BookingsController < ApplicationController
     from_time = booking_params[:from_time]
     to_time = booking_params[:to_time]
 
-    return render json: {errors: ['user_id, from_time and to_time required']}, 
-      status: :bad_request unless (user_id && from_time && to_time)
+    return render json: { errors: [ "user_id, from_time and to_time required" ] },
+      status: :bad_request unless user_id && from_time && to_time
 
     time_slot_ids = TimeSlot.where(user_id: coach_user_id)
-                            .where('? <= start_time', Time.parse(from_time))
-                            .where('? >= end_time', Time.parse(to_time)).map(&:id)
+                            .where("? <= start_time", Time.parse(from_time))
+                            .where("? >= end_time", Time.parse(to_time)).map(&:id)
 
     @bookings = Booking.includes(:time_slot)
                         .where(user_id: user_id)
                         .where(time_slot_id: time_slot_ids)
-                        .order({ time_slots: { start_time: :asc }})
-                   
-    render json: @bookings.map { |booking| { booking: booking, time_slot: booking.time_slot }}
+                        .order({ time_slots: { start_time: :asc } })
+
+    render json: @bookings.map { |booking| { booking: booking, time_slot: booking.time_slot } }
   end
 
   # GET /bookings/1

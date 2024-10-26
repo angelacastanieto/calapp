@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_26_152748) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_26_160214) do
   create_table "bookings", force: :cascade do |t|
     t.integer "satisfaction_score"
     t.text "notes"
@@ -39,6 +39,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_26_152748) do
     t.integer "user_type", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "phone_number"
   end
 
   add_foreign_key "bookings", "time_slots"
