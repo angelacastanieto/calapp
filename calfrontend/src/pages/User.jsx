@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
-import useSWR from 'swr'
 import { userIsCoach } from '../utils/utils'
 import Coach from './Coach'
 import Student from './Student'
-import { fetcher } from '../fetchers/fetchers'
+import useGetUser from '../hooks/useGetUser';
 
 const User = () => {
   let { userId } = useParams();
 
   // todo turn into hook in hooks file
-  const { data: user, error, loading } = useSWR(`http://localhost:3001/api/v1/users/${userId}`, fetcher)
+  const { data: user, error, loading } = useGetUser(userId)
 
   if (error || user?.error) return <div>Error loading user: {error?.message || user?.error}</div>
   if (loading) return <div>loading...</div>

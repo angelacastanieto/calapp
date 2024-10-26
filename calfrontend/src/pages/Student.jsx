@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import useSWR from 'swr';
 import CoachingCalendar from '../components/CoachingCalendar';
-import { fetcher } from '../fetchers/fetchers'
+import useGetCoaches from '../hooks/useGetCoaches';
 
 export const Student = ({ user }) => {
   const [selectedCoach, setSelectedCoach] = useState()
@@ -18,7 +18,7 @@ export const Student = ({ user }) => {
 }
 
 const CoachPicker = ({ onCoachSelect }) => {
-  const { data: coachUsers, error, loading } = useSWR(`http://localhost:3001/api/v1/users?user_type=coach`, fetcher)
+  const { data: coachUsers, error, loading } = useGetCoaches()
   const coachIdInputRef = useRef()
 
   if (!coachUsers) {

@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
-import useSWR from 'swr'
-import { getTimeSlots } from '../fetchers/fetchers';
+import React, { useRef, useState } from 'react';
+import useGetTimeSlots from '../hooks/useGetTimeSlots';
 import 'react-calendar/dist/Calendar.css';
 
 import Calendar from 'react-calendar';
@@ -10,7 +9,6 @@ import useCreateBooking from '../hooks/useCreateBooking';
 const TimeSlotCreatorForm = ({
   user,
   selectedDate,
-  onStartTimeChange,
   onCreateSuccess
 }) => {
   const [errors, setErrors] = useState()
@@ -66,8 +64,7 @@ const CoachingCalendar = ({ user, coachUserId, isCreator, isBooker }) => {
   const [selectedDate, setSelectedDate] = useState()
   const [errors, setErrors] = useState()
 
-  // TODO move into hooks, remove fetchers
-  const { data: timeSlotsData, loading: timeSlotsDataLoading, error: timeSlotsDataError, mutate: refetchTimeSlots } = useSWR(selectedDate, () => getTimeSlots(user.id, coachUserId, selectedDate))
+  const { data: timeSlotsData, loading: timeSlotsDataLoading, error: timeSlotsDataError, mutate: refetchTimeSlots } = useGetTimeSlots(user.id, coachUserId, selectedDate)
 
   if (timeSlotsData?.error) return <div>Error loading time slots: {timeSlotsData?.error}</div> //  todo: move down
   if (timeSlotsDataError) return <div>Error loading time slots: {timeSlotsDataError}</div> // todo: move down
@@ -80,7 +77,7 @@ const CoachingCalendar = ({ user, coachUserId, isCreator, isBooker }) => {
     setSelectedDate(new Date(value))
   }
 
-  const renderCalendar = (timeSlotData) => {
+  const renderTimeSlot = (timeSlotData) => {
     if (!timeSlotData) {
       return null
     }
@@ -122,7 +119,7 @@ const CoachingCalendar = ({ user, coachUserId, isCreator, isBooker }) => {
         {timeSlotsData && selectedDate && (
           <div className="flex flex-col space-y-4">
             <h2 className="font-semibold">{`${noTimeSlots ? 'No' : ''} Time slots for: ${selectedDate.toDateString()}`}</h2>
-            {timeSlotsData.map(timeSlotData => renderCalendar(timeSlotData))}
+            {timeSlotsData.map(timeSlotData => renderTimeSlot(timeSlotData))}
           </div>
         )
         }
@@ -142,8 +139,8 @@ const CreatorTimeSlot = ({ timeSlotData }) => {
     <div className="flex flex-col" key={`timeslot-${timeSlot.id}`}>
       <p>{startTime} to {endTime}</p>
       {booker && (
-          <p className="text-gray-500 ml-2">Booked by {booker.first_name} {booker.last_name} - {booker.phone_number}</p>
-        )
+        <p className="text-gray-500 ml-2">Booked by {booker.first_name} {booker.last_name} - {booker.phone_number}</p>
+      )
       }
     </div>
   )
@@ -167,23 +164,21 @@ const BookerTimeSlot = ({ timeSlotData, user, onBookingSuccess }) => {
 
     const result = await triggerCreateBooking(newBooking)
 
-    if (result.errors) {
-      setErrors(result.errors)
+    if (result.errors || createBookingError) {
+      setErrors(result.errors || createBookingError)
     }
   }
 
   const bookingState = () => {
     if (!timeSlotData.is_booked) {
       const timeSlot = timeSlotData.time_slot
-      // const creator = timeSlotData.creator
-      // const booker = timeSlotData.booker
 
       return (
         <button className="border border-black p-1 ml-2 rounded hover:cursor-pointer bg-cyan-200 active:bg-cyan-700" key={`timeslot-${timeSlot.id}`} onClick={() => handleTimeSlotClick(timeSlot.id)}>
           Book this time
         </button>
       )
-    } else if (timeSlotData.booker?.id == user.id) {
+    } else if (timeSlotData.booker?.id === user.id) {
       return (
         <p className="text-gray-500 ml-2">Booked by you - Coach #: {timeSlotData.creator.phone_number}</p>
       )
@@ -194,7 +189,7 @@ const BookerTimeSlot = ({ timeSlotData, user, onBookingSuccess }) => {
   return (
     <div key={`timeslot-${timeSlot.id}`}>
       {startTime} to {endTime}{bookingState()}
-      {errors}
+      <div className="text-red-700">{errors}</div>
     </div>
   )
 }

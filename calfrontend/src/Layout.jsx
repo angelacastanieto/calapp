@@ -1,10 +1,17 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import useSWR from 'swr';
-import { fetcher } from './fetchers/fetchers';
+import useGetAllUsers from './hooks/useGetAllUsers';
 
 const Layout = () => {
-  const { data: allUsers, error, loading } = useSWR(`http://localhost:3001/api/v1/users`, fetcher)
+  const { data: allUsers, error, loading } = useGetAllUsers()
+
+  if (loading) {
+    return '...Loading'
+  }
+
+  if (error) {
+    return 'Error loading users'
+  }
 
   if (!allUsers) {
     return null
@@ -30,14 +37,14 @@ const Layout = () => {
 
           <ul className="pl-2 hover:text-fuchsia-950">
             {
-              coaches.map(coach => <li><a href={`/users/${coach.id}`}>{coach.first_name} {coach.last_name}</a></li>)
+              coaches.map(coach => <li key={coach.id}><a href={`/users/${coach.id}`}>{coach.first_name} {coach.last_name}</a></li>)
             }
           </ul>
 
           <p className="text-xl font-semibold">Example students</p>
           <ul className="pl-2 hover:text-fuchsia-950">
             {
-              students.map(student => <li><a href={`/users/${student.id}`}>{student.first_name} {student.last_name}</a></li>)
+              students.map(student => <li key={student.id}><a href={`/users/${student.id}`}>{student.first_name} {student.last_name}</a></li>)
             }
           </ul>
         </nav>
