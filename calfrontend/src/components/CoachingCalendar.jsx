@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import useSWR from 'swr'
 import { getTimeSlots } from '../fetchers/fetchers';
+import 'react-calendar/dist/Calendar.css';
 
 import Calendar from 'react-calendar';
 import useCreateTimeSlot from '../hooks/useCreateTimeSlot';

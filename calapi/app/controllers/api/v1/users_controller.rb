@@ -5,10 +5,7 @@ class Api::V1::UsersController < ApplicationController
   def index
     user_type = user_params[:user_type]
 
-    return render json: { errors: [ "user_type required" ] },
-      status: :bad_request unless user_type
-
-    @users = User.where(user_type: user_type)
+    @users = user_type ? User.where(user_type: user_type) : User.all
 
     render json: @users
   end

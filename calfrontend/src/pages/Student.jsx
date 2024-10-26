@@ -7,13 +7,12 @@ export const Student = ({ user }) => {
   const [selectedCoach, setSelectedCoach] = useState()
 
   const renderCoachCalendar = () => {
-    console.log('acac selectedCoach', JSON.stringify(selectedCoach))
     return selectedCoach && <div>Calendar for {`${selectedCoach.first_name} ${selectedCoach.last_name}`}<CoachingCalendar user={user} coachUserId={selectedCoach.id} isBooker /></div>
   }
 
   return (
     <div>
-      <h2>Student example</h2>
+      <h2>Student Portal</h2>
       <h3>Hi {user.first_name}</h3>
       <CoachPicker onCoachSelect={(value) => setSelectedCoach(value)} />
       {renderCoachCalendar()}
@@ -33,8 +32,6 @@ const CoachPicker = ({ onCoachSelect }) => {
     obj[coachUser.id] = coachUser
     return obj;
   }, {});
-
-  console.log('acac coachMap', coachMap)
 
   if (error) {
     return error

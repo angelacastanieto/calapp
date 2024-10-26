@@ -3,9 +3,9 @@ import React from 'react';
 
 function Home() {
   return (
-    <div>
+    <div className="px-10">
       <h2>Home Page</h2>
-      <p>Click on a student or coach link to begin</p>
+      <p>Click on a student or coach on the left to begin</p>
     </div>
   );
 }
