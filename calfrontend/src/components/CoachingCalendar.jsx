@@ -7,21 +7,21 @@ import Calendar from 'react-calendar';
 import useCreateTimeSlot from '../hooks/useCreateTimeSlot';
 import useCreateBooking from '../hooks/useCreateBooking';
 
-const TimeSlotCreatorForm = ({ 
-    user, 
-    selectedDate, 
-    onStartTimeChange,
-    onCreateSuccess 
-  }) => {
+const TimeSlotCreatorForm = ({
+  user,
+  selectedDate,
+  onStartTimeChange,
+  onCreateSuccess
+}) => {
   const [errors, setErrors] = useState()
-  const { trigger: triggerCreateTimeSlot, isMutating } = useCreateTimeSlot({ onCreateSuccess })
+  const { trigger: triggerCreateTimeSlot, error: triggerCreateTimeSlotError, isMutating } = useCreateTimeSlot({ onCreateSuccess })
   const startTimeinputRef = useRef()
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrors(null)
 
     const value = startTimeinputRef.current.value
-    console.log('acac value', startTimeinputRef.current.value)
     const [hours, minutes] = value.split(':')
 
     // copy selected date so do not update selectedDate before submit
@@ -36,33 +36,29 @@ const TimeSlotCreatorForm = ({
 
     const result = await triggerCreateTimeSlot(newTimeSlot)
 
-    if (result.errors) {
-      setErrors(result.errors)
+    if (result.errors || triggerCreateTimeSlotError) {
+      setErrors(result.errors[0] || triggerCreateTimeSlotError)
     }
-  }
-
-  const handleStartTimeChange = (e) => {
-    if (errors) {
-      setErrors(null)
-    }
-    onStartTimeChange(e.target.value)
   }
 
   return (
     <div>
       <form onSubmit={handleSubmit}>
         <label>Pick a start time for a 2-hour appointment
-          <input 
+          <br />
+          <input
+            className="border border-black px-2 py-1 mt-2 rounded"
             ref={startTimeinputRef}
-            required={true} 
-            min="08:00" 
-            max="18:00" 
-            aria-label="start time" 
-            type="time" 
+            required={true}
+            min="08:00"
+            max="18:00"
+            aria-label="start time"
+            type="time"
           />
         </label>
-        <button disabled={!(selectedDate) || isMutating} type="submit">Submit</button>
+        <button className="border border-black p-1 ml-2 rounded hover:cursor-pointer bg-cyan-200 active:bg-cyan-700" disabled={!(selectedDate) || isMutating} type="submit">Submit</button>
       </form>
+      <div className="text-red-700">{errors}</div>
     </div>
   )
 }
@@ -100,34 +96,37 @@ const CoachingCalendar = ({ user, coachUserId, isCreator, isBooker }) => {
     if (isBooker) {
       return (
         <BookerTimeSlot
-          timeSlotData={timeSlotData} 
+          timeSlotData={timeSlotData}
           user={user}
           onBookingSuccess={refetchTimeSlots}
         />
       )
     }
 
-    return null;    
+    return null;
   }
 
   const noTimeSlots = timeSlotsData?.length === 0
 
   return (
-    <div>
-      <Calendar onClickDay={handleClickDay} />
-      {isCreator && <TimeSlotCreatorForm
-        user={user}
-        selectedDate={selectedDate}
-        onCreateSuccess={refetchTimeSlots}
-      />}
-
-      {timeSlotsData && ( 
-          <div>
-            {selectedDate ? `${noTimeSlots ? 'No' : ''} Time slots for: ${selectedDate.toDateString()}` : null}
+    <div className="flex flex-row space-x-20 py-10">
+      <div className="flex flex-col space-y-10">
+        <Calendar className="rounded" onClickDay={handleClickDay} />
+        {selectedDate && isCreator && <TimeSlotCreatorForm
+          user={user}
+          selectedDate={selectedDate}
+          onCreateSuccess={refetchTimeSlots}
+        />}
+      </div>
+      <div>
+        {timeSlotsData && selectedDate && (
+          <div className="flex flex-col space-y-4">
+            <h2 className="font-semibold">{`${noTimeSlots ? 'No' : ''} Time slots for: ${selectedDate.toDateString()}`}</h2>
             {timeSlotsData.map(timeSlotData => renderCalendar(timeSlotData))}
           </div>
         )
-      }
+        }
+      </div>
       <div>{errors}</div>
     </div>
   )
@@ -140,8 +139,12 @@ const CreatorTimeSlot = ({ timeSlotData }) => {
 
   const booker = timeSlotData.booker
   return (
-    <div key={`timeslot-${timeSlot.id}`}>
-      {startTime} to {endTime}{booker && ` (Booked by ${booker.first_name} ${booker.last_name}) - ${booker.phone_number}`}
+    <div className="flex flex-col" key={`timeslot-${timeSlot.id}`}>
+      <p>{startTime} to {endTime}</p>
+      {booker && (
+          <p className="text-gray-500 ml-2">Booked by {booker.first_name} {booker.last_name} - {booker.phone_number}</p>
+        )
+      }
     </div>
   )
 }
@@ -152,7 +155,7 @@ const BookerTimeSlot = ({ timeSlotData, user, onBookingSuccess }) => {
   const startTime = new Date(timeSlot.start_time).toLocaleTimeString()
   const endTime = new Date(timeSlot.end_time).toLocaleTimeString()
 
-  const { trigger: triggerCreateBooking, error: createBookingError } = useCreateBooking({onCreateSuccess: onBookingSuccess})
+  const { trigger: triggerCreateBooking, error: createBookingError } = useCreateBooking({ onCreateSuccess: onBookingSuccess })
 
   const handleTimeSlotClick = async (timeSlotId) => {
     setErrors(null)
@@ -163,24 +166,29 @@ const BookerTimeSlot = ({ timeSlotData, user, onBookingSuccess }) => {
     }
 
     const result = await triggerCreateBooking(newBooking)
-    
+
     if (result.errors) {
       setErrors(result.errors)
     }
   }
-  
+
   const bookingState = () => {
     if (!timeSlotData.is_booked) {
       const timeSlot = timeSlotData.time_slot
+      // const creator = timeSlotData.creator
+      // const booker = timeSlotData.booker
+
       return (
-        <button key={`timeslot-${timeSlot.id}`} onClick={() => handleTimeSlotClick(timeSlot.id)}>
+        <button className="border border-black p-1 ml-2 rounded hover:cursor-pointer bg-cyan-200 active:bg-cyan-700" key={`timeslot-${timeSlot.id}`} onClick={() => handleTimeSlotClick(timeSlot.id)}>
           Book this time
         </button>
       )
     } else if (timeSlotData.booker?.id == user.id) {
-      return `(Booked by you - Coach #: ${timeSlotData.creator.phone_number}`
+      return (
+        <p className="text-gray-500 ml-2">Booked by you - Coach #: {timeSlotData.creator.phone_number}</p>
+      )
     } else {
-      return '(Booked)'
+      return <p className="text-gray-500 ml-2">Unavailable</p>
     }
   }
   return (

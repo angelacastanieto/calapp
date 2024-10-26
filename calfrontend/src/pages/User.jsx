@@ -19,11 +19,14 @@ const User = () => {
     return null
   }
 
-  if (userIsCoach(user.user_type)) {
-    return <Coach user={user} />
-  }
+  const isCoach = userIsCoach(user.user_type)
 
-  return <Student user={user} />
+  return (
+    <div>
+      <h1 className="text-xl font-semibold">{isCoach ? 'Coach' : 'Student'} Portal</h1>
+      {isCoach ? <Coach user={user} /> : <Student user={user} />}
+    </div>
+  )
 }
 
 export default User;

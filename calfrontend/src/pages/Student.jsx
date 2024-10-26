@@ -6,16 +6,13 @@ import { fetcher } from '../fetchers/fetchers'
 export const Student = ({ user }) => {
   const [selectedCoach, setSelectedCoach] = useState()
 
-  const renderCoachCalendar = () => {
-    return selectedCoach && <div>Calendar for {`${selectedCoach.first_name} ${selectedCoach.last_name}`}<CoachingCalendar user={user} coachUserId={selectedCoach.id} isBooker /></div>
-  }
-
   return (
     <div>
-      <h2>Student Portal</h2>
-      <h3>Hi {user.first_name}</h3>
-      <CoachPicker onCoachSelect={(value) => setSelectedCoach(value)} />
-      {renderCoachCalendar()}
+      <h3 className="text-lg">Hi {user.first_name}!</h3>
+      <div className="flex flex-col space-y-4s">
+        <CoachPicker onCoachSelect={(value) => setSelectedCoach(value)} />
+        {selectedCoach && <CoachingCalendar user={user} coachUserId={selectedCoach.id} isBooker />}
+      </div>
      </div>
   )
 }
@@ -48,13 +45,17 @@ const CoachPicker = ({ onCoachSelect }) => {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>Select a coach:</label>
-      <select ref={coachIdInputRef} name="coaches" id="coaches">
-        {coachUsers.map(coachUser => <option value={coachUser.id}>{`${coachUser.first_name} ${coachUser.last_name}`}</option>)}
-      </select>
-      <input type="submit" value="View calendar"/>
-    </form>
+    <div>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>Select a coach to view their calendar.</label><br/>
+          <select className="border mr-4 my-2 p-1 rounded border-gray-700 bg-gray-300" ref={coachIdInputRef} name="coaches" id="coaches">
+            {coachUsers.map(coachUser => <option value={coachUser.id}>{`${coachUser.first_name} ${coachUser.last_name}`}</option>)}
+          </select>
+          <input className="border border-black p-1 rounded hover:cursor-pointer bg-cyan-200 active:bg-cyan-700" type="submit" value="View calendar"/>
+        </div>
+      </form>
+    </div>
   )
 }
 export default Student;

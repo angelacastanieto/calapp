@@ -21,8 +21,8 @@ const Layout = () => {
   })
 
   return (
-    <div className="flex flex-row p-5">
-      <header>
+    <div className="flex flex-row h-screen">
+      <header className="bg-gray-200 p-5 w-[250px]">
         <h1 className="text-2xl font-bold text-fuchsia-950">Scheduler App</h1>
         <nav className="flex flex-col space-y-2">
           <a href="/">Home</a>
@@ -42,7 +42,7 @@ const Layout = () => {
           </ul>
         </nav>
       </header>
-      <main>
+      <main className="py-8 px-24">
         <Outlet />
       </main>
     </div>
