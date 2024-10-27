@@ -3,6 +3,8 @@ class Api::V1::BookingsController < ApplicationController
 
   # GET /bookings
   def index
+    # This is not being used anymore since including data in time_slot controller
+    # But leaving for historical purposes
     coach_user_id = booking_params[:coach_user_id]
     user_id = booking_params[:user_id]
     from_time = booking_params[:from_time]
