@@ -8,7 +8,6 @@ import useGetUser from '../hooks/useGetUser';
 const User = () => {
   let { userId } = useParams();
 
-  // todo turn into hook in hooks file
   const { data: user, error, loading } = useGetUser(userId)
 
   if (error || user?.error) return <div>Error loading user: {error?.message || user?.error}</div>

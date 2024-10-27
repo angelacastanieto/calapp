@@ -1,6 +1,5 @@
 import React, { useRef, useState } from 'react';
-import useSWR from 'swr';
-import CoachingCalendar from '../components/CoachingCalendar';
+import CoachingCalendar from '../components/CoachingCalendar/CoachingCalendar';
 import useGetCoaches from '../hooks/useGetCoaches';
 
 export const Student = ({ user }) => {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import CoachingCalendar from '../components/CoachingCalendar';
+import CoachingCalendar from '../components/CoachingCalendar/CoachingCalendar';
 
 export const Coach = ({ user }) => {
 
