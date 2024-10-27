@@ -47,7 +47,7 @@ Open another terminal window and cd into the calapp directory again, then do the
 
 Navigate to [http://localhost:3000/](http://localhost:3000/)
 
-## How to another test user
+## How to add another test user
 From calapp root directory
 `cd calapi`
 
