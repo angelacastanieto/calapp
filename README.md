@@ -1,4 +1,6 @@
 # CalApp
+<img width="1247" alt="Screenshot 2024-10-26 at 9 45 36 PM" src="https://github.com/user-attachments/assets/b816085b-c231-462c-a7c0-f7ab78615d3f">
+<img width="1196" alt="Screenshot 2024-10-26 at 9 45 19 PM" src="https://github.com/user-attachments/assets/197fe2de-c58b-49ae-8e2f-7b4d89103af9">
 
 ## Assumptions
 * Time slots will only be available from 8-6 local to user’s current timezone
@@ -17,10 +19,13 @@
 Before running this app, you will need to ensure ruby and npm are installed
 
 If you get a version # back when running the following, you have ruby installed; if not, then you'll have to install it ([link](https://www.ruby-lang.org/en/documentation/installation/))
+
 `ruby -v` 
 
 If you get version #'s back when running the following, you have node/npm installed; if not, you'll have to install them ([link](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm))
+
 `node -v`
+
 `npm -v`
 
 ### Run CalApp locally
