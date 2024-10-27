@@ -2,6 +2,12 @@
 <img width="1247" alt="Screenshot 2024-10-26 at 9 45 36 PM" src="https://github.com/user-attachments/assets/b816085b-c231-462c-a7c0-f7ab78615d3f">
 <img width="1196" alt="Screenshot 2024-10-26 at 9 45 19 PM" src="https://github.com/user-attachments/assets/197fe2de-c58b-49ae-8e2f-7b4d89103af9">
 
+CalApp is a fullstack application with a React frontend and a Rails backend
+
+The React Frontend can be found in the `calfrontend` directory
+
+The Rails backend can be found in the `calapi` directory
+
 ## Assumptions
 * Time slots will only be available from 8-6 local to user’s current timezone
 * Time slots will always be exactly 2 hours
@@ -29,6 +35,7 @@ If you get version #'s back when running the following, you have node/npm instal
 `npm -v`
 
 ### Run CalApp locally
+#### Run the rails backend
 Open a terminal window and cd into the calapp directory, then do the following
 
 `cd calapi`
@@ -37,6 +44,7 @@ Open a terminal window and cd into the calapp directory, then do the following
 
 `rails s`
 
+#### Run the React frontend app
 Open another terminal window and cd into the calapp directory again, then do the following
 
 `cd calfrontend`
